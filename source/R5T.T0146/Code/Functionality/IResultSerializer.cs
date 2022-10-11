@@ -18,7 +18,7 @@ namespace R5T.T0146
             {
                 Success = result.IsSuccess(),
                 Title = result.Title,
-                Metadata = new(result.Metadata),
+                Metadata = new Dictionary<string, object>(result.Metadata),
                 Failures = result.Failures.Select(x => IResultSerializer.ToSerialization(x)).Now(),
                 Successes = result.Successes.Select(x => IResultSerializer.ToSerialization(x)).Now(),
                 Children = result.Children.Select(x => IResultSerializer.ToSerialization(x)).Now(),
@@ -32,7 +32,7 @@ namespace R5T.T0146
             var output = new Serialization.Success()
             {
                 Message = success.Message,
-                Metadata = new(success.Metadata),
+                Metadata = new Dictionary<string, object>(success.Metadata),
             };
 
             return output;
@@ -48,7 +48,7 @@ namespace R5T.T0146
             }
             else
             {
-                output = new();
+                output = new Serialization.Failure();
 
                 IResultSerializer.FillSerialization(output, failure);
             }
@@ -73,7 +73,7 @@ namespace R5T.T0146
         private static void FillSerialization(Serialization.Failure output, IFailure failure)
         {
             output.Message = failure.Message;
-            output.Metadata = new(failure.Metadata);
+            output.Metadata = new Dictionary<string, object>(failure.Metadata);
             output.Causes = failure.Causes.Select(x => IResultSerializer.ToSerialization(x)).Now();
         }
 

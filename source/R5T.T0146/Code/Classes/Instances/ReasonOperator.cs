@@ -7,7 +7,7 @@ namespace R5T.T0146
 	{
 		#region Infrastructure
 
-	    public static ReasonOperator Instance { get; } = new();
+	    public static IReasonOperator Instance { get; } = new ReasonOperator();
 
 	    private ReasonOperator()
 	    {

@@ -7,7 +7,7 @@ namespace R5T.T0146
 	{
 		#region Infrastructure
 
-	    public static ResultOperator Instance { get; } = new();
+	    public static IResultOperator Instance { get; } = new ResultOperator();
 
 	    private ResultOperator()
 	    {

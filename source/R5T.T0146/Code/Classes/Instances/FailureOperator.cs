@@ -7,7 +7,7 @@ namespace R5T.T0146
 	{
 		#region Infrastructure
 
-	    public static FailureOperator Instance { get; } = new();
+	    public static IFailureOperator Instance { get; } = new FailureOperator();
 
 	    private FailureOperator()
 	    {

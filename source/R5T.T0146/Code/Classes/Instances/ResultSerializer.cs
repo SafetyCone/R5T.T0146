@@ -7,7 +7,7 @@ namespace R5T.T0146
 	{
 		#region Infrastructure
 
-	    public static ResultSerializer Instance { get; } = new();
+	    public static IResultSerializer Instance { get; } = new ResultSerializer();
 
 	    private ResultSerializer()
 	    {

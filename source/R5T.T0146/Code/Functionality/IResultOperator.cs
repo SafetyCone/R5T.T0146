@@ -32,7 +32,8 @@ namespace R5T.T0146
             return result;
         }
 
-        public Result AddFailure(Result result, string failureMessage)
+        public TResult AddFailure<TResult>(TResult result, string failureMessage)
+            where TResult : Result
         {
             result.Failures.Add(
                 Instances.ReasonOperator.Failure(failureMessage));
@@ -77,6 +78,24 @@ namespace R5T.T0146
             where TResult : Result
         {
             result.Metadata.AddRange(metadata);
+
+            return result;
+        }
+
+        public TResult AddOutcome<TResult>(TResult result,
+            bool success,
+            string successReason,
+            string failureReason)
+            where TResult : Result
+        {
+            if (success)
+            {
+                result.WithSuccess(successReason);
+            }
+            else
+            {
+                result.WithFailure(failureReason);
+            }
 
             return result;
         }
@@ -256,6 +275,19 @@ namespace R5T.T0146
                 ;
 
             return output;
+        }
+
+        public IReason ToReason(
+            IResult result,
+            string successReason,
+            string failureReason)
+        {
+            var reason = result.IsSuccess()
+                ? Instances.ReasonOperator.Success(successReason) as IReason
+                : Instances.ReasonOperator.Failure(failureReason, result.Failures) as IReason
+                ;
+
+            return reason;
         }
     }
 }

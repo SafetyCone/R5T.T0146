@@ -28,6 +28,18 @@ namespace System
             return output;
         }
 
+        public static IReason ToReason(this IResult result,
+            string successReason,
+            string failureReason)
+        {
+            var reason = Instances.ResultOperator.ToReason(
+                result,
+                successReason,
+                failureReason);
+
+            return reason;
+        }
+
         public static Result WithChild(this Result result, IResult childResult)
         {
             var output = Instances.ResultOperator.AddChild(result, childResult);
@@ -47,7 +59,8 @@ namespace System
             return output;
         }
 
-        public static Result WithFailure(this Result result, string failureMessage)
+        public static TResult WithFailure<TResult>(this TResult result, string failureMessage)
+            where TResult : Result
         {
             var output = Instances.ResultOperator.AddFailure(result, failureMessage);
             return output;
@@ -77,6 +90,21 @@ namespace System
         {
             var output = Instances.ResultOperator.AddMetadata(reason, key, value);
             return output;
+        }
+
+        public static TResult WithOutcome<TResult>(this TResult result,
+            bool success,
+            string successReason,
+            string failureReason)
+            where TResult : Result
+        {
+            result = Instances.ResultOperator.AddOutcome(
+                result,
+                success,
+                successReason,
+                failureReason);
+
+            return result;
         }
 
         public static TResult WithMetadata<TResult>(this TResult reason, IDictionary<string, object> metadata)
