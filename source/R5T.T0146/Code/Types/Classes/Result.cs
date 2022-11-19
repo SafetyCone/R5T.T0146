@@ -15,7 +15,7 @@ namespace R5T.T0146
 
         public List<IFailure> Failures { get; } = new List<IFailure>();
         public List<ISuccess> Successes { get; } = new List<ISuccess>();
-        public List<IResult> Children { get; } = new List<IResult>();
+        public List<Result> Children { get; } = new List<Result>();
 
 
         IReadOnlyDictionary<string, object> IResult.Metadata => this.Metadata;

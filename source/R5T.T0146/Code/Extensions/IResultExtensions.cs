@@ -40,20 +40,26 @@ namespace System
             return reason;
         }
 
-        public static Result WithChild(this Result result, IResult childResult)
+        public static Result WithChild(this Result result, Result childResult)
         {
             var output = Instances.ResultOperator.AddChild(result, childResult);
             return output;
         }
 
-        public static TResult WithChildren<TResult>(this TResult result, params IResult[] childResults)
+        public static Result WithChild_IfFailure(this Result result, Result childResult)
+        {
+            var output = Instances.ResultOperator.AddChild_IfFailure(result, childResult);
+            return output;
+        }
+
+        public static TResult WithChildren<TResult>(this TResult result, params Result[] childResults)
             where TResult : Result
         {
             var output = Instances.ResultOperator.AddChildren(result, childResults);
             return output;
         }
 
-        public static Result WithChildren(this Result result, IEnumerable<IResult> childResults)
+        public static Result WithChildren(this Result result, IEnumerable<Result> childResults)
         {
             var output = Instances.ResultOperator.AddChildren(result, childResults);
             return output;

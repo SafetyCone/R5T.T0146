@@ -10,22 +10,37 @@ namespace R5T.T0146
 	[FunctionalityMarker]
 	public partial interface IResultOperator : IFunctionalityMarker
 	{
-        public Result AddChild(Result result, IResult childResult)
+        public Result AddChild(Result result, Result childResult)
         {
             result.Children.Add(childResult);
 
             return result;
         }
 
-        public TResult AddChildren<TResult>(TResult result, params IResult[] childResults)
-            where TResult : Result
+        /// <summary>
+        /// Adds a child result only if the child result is a failure.
+        /// </summary>
+        public Result AddChild_IfFailure(Result result, Result childResult)
         {
-            result.Children.AddRange(childResults);
+            if(childResult.IsFailure())
+            {
+                this.AddChild(result, childResult);
+            }
 
             return result;
         }
 
-        public Result AddChildren(Result result, IEnumerable<IResult> childResults)
+        public TResult AddChildren<TResult>(TResult result, params Result[] childResults)
+            where TResult : Result
+        {
+            this.AddChildren(
+                result,
+                childResults.AsEnumerable());
+
+            return result;
+        }
+
+        public Result AddChildren(Result result, IEnumerable<Result> childResults)
         {
             result.Children.AddRange(childResults);
 
@@ -184,6 +199,18 @@ namespace R5T.T0146
             return isSuccess;
         }
 
+        public Result<TValue> New<TValue>()
+        {
+            var result = this.Result<TValue>();
+            return result;
+        }
+
+        public Result New()
+        {
+            var result = this.Result();
+            return result;
+        }
+
         public IEnumerable<IReason> Reasons(Result result)
         {
             var output = result.Failures
@@ -201,6 +228,40 @@ namespace R5T.T0146
             destination.Failures.AddRange(source.Failures);
             destination.Successes.AddRange(source.Successes);
             destination.Children.AddRange(source.Children);
+        }
+
+        /// <summary>
+        /// Quality-of-life overload for <see cref="Filter_RemoveSuccesses{TResult}(TResult)"/>
+        /// </summary>
+        public void Filter_KeepFailuresOnly<TResult>(TResult result)
+            where TResult : Result
+        {
+            this.Filter_RemoveSuccesses(result);
+        }
+
+        /// <summary>
+        /// This is useful when trying to find failures.
+        /// </summary>
+        public void Filter_RemoveSuccesses<TResult>(TResult result)
+            where TResult : Result
+        {
+            // Remove all success reaons.
+            result.Successes.Clear();
+
+            // Keep only failure children.
+            var failureChildren = result.Children
+                .Where(child => child.IsFailure())
+                .Now();
+
+            result.Children.Clear();
+
+            result.Children.AddRange(failureChildren);
+
+            // Recurse.
+            foreach (var child in result.Children)
+            {
+                this.Filter_RemoveSuccesses(child);
+            }
         }
 
         public Result<T> Result<T>(Result result, T value)
