@@ -350,5 +350,11 @@ namespace R5T.T0146
 
             return reason;
         }
+
+        public string ToString(IResult result)
+        {
+            var representation = $"{result.IsSuccess()}: success?";
+            return representation;
+        }
     }
 }
