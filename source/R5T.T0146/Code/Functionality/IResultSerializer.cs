@@ -82,7 +82,7 @@ namespace R5T.T0146
             var output = new Serialization.Exception
             {
                 Message = exception.Message,
-                Type = F0000.Instances.TypeOperator.GetTypeNameOf(exception),
+                Type = F0000.Instances.TypeOperator.Get_TypeNameOf(exception),
             };
 
             return output;
