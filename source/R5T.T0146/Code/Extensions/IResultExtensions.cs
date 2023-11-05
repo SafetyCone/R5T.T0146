@@ -10,12 +10,14 @@ namespace System
 {
     public static class IResultExtensions
     {
+        /// <inheritdoc cref="IResultOperator.IsFailure(IResult)"/>
         public static bool IsFailure(this IResult result)
         {
             var output = Instances.ResultOperator.IsFailure(result);
             return output;
         }
 
+        /// <inheritdoc cref="IResultOperator.IsSuccess(IResult)"/>
         public static bool IsSuccess(this IResult result)
         {
             var output = Instances.ResultOperator.IsSuccess(result);
@@ -46,6 +48,7 @@ namespace System
             return output;
         }
 
+        /// <inheritdoc cref="IResultOperator.AddChild_IfFailure(Result, Result)"/>
         public static Result WithChild_IfFailure(this Result result, Result childResult)
         {
             var output = Instances.ResultOperator.AddChild_IfFailure(result, childResult);
@@ -159,6 +162,22 @@ namespace System
         {
             var output = Instances.ResultOperator.AddValue(result, value);
             return output;
+        }
+    }
+}
+
+
+namespace R5T.T0146.Extensions
+{
+    public static class IResultExtensions
+    {
+        /// <inheritdoc cref="IResultOperator.AddChildFailuresFailure_IfChildFailures(Result)"/>
+        public static TResult AddChildFailuresFailure_IfChildFailures<TResult>(this TResult result)
+            where TResult : Result
+        {
+            Instances.ResultOperator.AddChildFailuresFailure_IfChildFailures(result);
+
+            return result;
         }
     }
 }

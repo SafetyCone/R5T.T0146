@@ -7,7 +7,7 @@ using R5T.T0142;
 
 namespace R5T.T0146
 {
-    [UtilityTypeMarker]
+    [DataTypeMarker]
     public class ExceptionFailure : Failure, IExceptionFailure
     {
         [JsonConverter(typeof(ExceptionJsonConverter))]

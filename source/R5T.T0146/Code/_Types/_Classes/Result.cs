@@ -7,7 +7,7 @@ using R5T.T0142;
 namespace R5T.T0146
 {
     /// <inheritdoc cref="IResult"/>
-    [UtilityTypeMarker]
+    [DataTypeMarker]
     public class Result : IResult
     {
         public string Title { get; set; }
@@ -22,6 +22,18 @@ namespace R5T.T0146
         IEnumerable<IFailure> IResult.Failures => this.Failures;
         IEnumerable<ISuccess> IResult.Successes => this.Successes;
         IEnumerable<IResult> IResult.Children => this.Children;
+
+        public override string ToString()
+        {
+            var isFailure = Instances.ResultOperator.IsFailure(this);
+
+            var output = isFailure
+                ? $"<FAIL> {this.Title}"
+                : $"<Success> {this.Title}"
+                ;
+
+            return output;
+        }
     }
 
 
@@ -32,6 +44,16 @@ namespace R5T.T0146
     [UtilityTypeMarker]
     public class Result<TValue> : Result, IResult<TValue>
     {
+        #region Static
+
+        public static implicit operator TValue(Result<TValue> result)
+        {
+            return result.Value;
+        }
+
+        #endregion
+
+
         private bool zHasValue;
         public bool HasValue => this.zHasValue;
 
@@ -46,6 +68,18 @@ namespace R5T.T0146
                 
                 this.zHasValue = true;
             }
+        }
+
+        public override string ToString()
+        {
+            var isFailure = Instances.ResultOperator.IsFailure(this);
+
+            var output = isFailure
+                ? $"<FAIL> {this.Value} | {this.Title}"
+                : $"<Success> {this.Value} | {this.Title}"
+                ;
+
+            return output;
         }
     }
 }

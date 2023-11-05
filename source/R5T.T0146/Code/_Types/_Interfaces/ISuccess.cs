@@ -8,7 +8,7 @@ namespace R5T.T0146
     /// <summary>
     /// A success is a reason that a result succeeded.
     /// </summary>
-    [UtilityTypeMarker]
+    [DataTypeMarker]
     public interface ISuccess : IReason
     {
     }

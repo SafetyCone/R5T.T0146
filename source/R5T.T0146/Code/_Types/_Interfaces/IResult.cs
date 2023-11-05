@@ -10,7 +10,7 @@ namespace R5T.T0146
     /// A result is a collection of failure reasons, success reasons, and child results, any of which might be empty.
     /// Results form a hierarchy since a result can contain child results.
     /// </summary>
-    [UtilityTypeMarker]
+    [DataTypeMarker]
     public interface IResult
     {
         string Title { get; }

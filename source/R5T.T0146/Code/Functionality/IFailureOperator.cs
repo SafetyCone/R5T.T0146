@@ -29,5 +29,11 @@ namespace R5T.T0146
 
 			return failure;
 		}
+
+		public Failure Get_ChildFailuresFailure()
+		{
+			var output = Instances.ReasonOperator.Failure("Failure due to child result failures.");
+			return output;
+		}
 	}
 }

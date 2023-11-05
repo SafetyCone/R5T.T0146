@@ -7,7 +7,7 @@ using R5T.T0142;
 namespace R5T.T0146
 {
     /// <inheritdoc cref="IReason"/>
-    [UtilityTypeMarker]
+    [DataTypeMarker]
     public abstract class Reason : IReason
     {
         public string Message { get; set; }

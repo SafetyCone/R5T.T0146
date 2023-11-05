@@ -10,6 +10,21 @@ namespace R5T.T0146
 	[FunctionalityMarker]
 	public partial interface IResultOperator : IFunctionalityMarker
 	{
+        /// <summary>
+        /// If a result has child failures, add a failure reason.
+        /// </summary>
+        public void AddChildFailuresFailure_IfChildFailures(Result result)
+        {
+            var hasChildFailures = this.Has_ChildFailures(result);
+
+            if (hasChildFailures)
+            {
+                var childFailuresFailure = Instances.FailureOperator.Get_ChildFailuresFailure();
+
+                result.WithReason(childFailuresFailure);
+            }
+        }
+
         public Result AddChild(Result result, Result childResult)
         {
             result.Children.Add(childResult);
@@ -179,18 +194,59 @@ namespace R5T.T0146
             return output;
         }
 
+        public Result<TValue> Failure<TValue>(TValue value, string failureMessage)
+        {
+            var output = this.Result<TValue>(value)
+                .WithFailure(failureMessage)
+                ;
+            return output;
+        }
+
         public Result<TValue> Failure<TValue>(string failureMessage, Exception cause)
         {
             var output = this.Result<TValue>().WithFailure(failureMessage, cause);
             return output;
         }
 
+        /// <summary>
+        /// Are any of a result's children failures?
+        /// </summary>
+        public bool Has_ChildFailures(IResult result)
+        {
+            var output = result.Children
+                .Where(child => this.IsFailure(child))
+                .Any();
+                ;
+
+            return output;
+        }
+
+        /// <summary>
+        /// Are any of a result's children, or children of children, failures recursively?
+        /// </summary>
+        public bool Has_ChildFailures_Recursive(IResult result)
+        {
+            var output = result.Children
+                .Where(child => this.IsFailure(child))
+                .Any();
+            ;
+
+            return output;
+        }
+
+        /// <summary>
+        /// If there are any failure reasons, the result is a failure.
+        /// </summary>
         public bool IsFailure(IResult result)
         {
             var isFailure = result.Failures.Any();
             return isFailure;
         }
 
+        /// <summary>
+        /// If there are any failure reasons, the result is a failure.
+        /// Otherwise, the result is a success.
+        /// </summary>
         public bool IsSuccess(IResult result)
         {
             var isFailure = this.IsFailure(result);
@@ -202,6 +258,15 @@ namespace R5T.T0146
         public Result<TValue> New<TValue>()
         {
             var result = this.Result<TValue>();
+            return result;
+        }
+
+        public Result<TValue> New<TValue>(TValue value)
+        {
+            var result = this.New<TValue>()
+                .WithValue(value)
+                ;
+
             return result;
         }
 

@@ -4,9 +4,12 @@ using System.Linq;
 
 using Newtonsoft.Json;
 
+using R5T.T0142;
+
 
 namespace R5T.T0146.Serialization
 {
+    [DataTypeMarker]
     public sealed class Result
     {
         [JsonProperty(PropertyName = "SUCCESS", Order = 10)]
